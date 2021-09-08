@@ -15,8 +15,10 @@ function Block(){
 }
 
 
-function Ledger(persistence, securityContext){
-    persistence.load()
+function Ledger(eventsFactory, securityContext, persistence){
+
+    this.blocks = persistence.load();
+    this.state  = {};
     let currentBlock = undefined;
 
     this.beginBlock = function() {
@@ -35,6 +37,6 @@ function Ledger(persistence, securityContext){
 
 
 
-module.exports.createLedger = function(){
-    return new Ledger();
+module.exports.createLedger = function(eventsFactory, securityContext, persistence){
+    return new Ledger(eventsFactory, securityContext, persistence);
 }
