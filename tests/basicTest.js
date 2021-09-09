@@ -8,7 +8,7 @@ function inceptionEvent(fromJSON){
       fromJSON.type = "inception";
   }
 
-    this.action = (ledger) => {
+    this.execute = (ledger) => {
         ledger.state.key = fromJSON.key;
     }
 
@@ -22,7 +22,7 @@ function changeEvent(fromJSON){
         fromJSON.type = "change";
     }
 
-    this.action = (ledger) => {
+    this.execute = (ledger) => {
         ledger.state.key = fromJSON.key;
     }
 
@@ -68,7 +68,15 @@ function mockPersistence(){
 
 }
 
-let newLedger = ledger.createLedger(eventsFactory, new mockSecurityContext(), new mockPersistence());
+function mockValidationStrategy(){
+
+}
+
+let newLedger = ledger.createLedger("mockdid",
+        eventsFactory,
+        new mockSecurityContext(),
+        new mockPersistence(),
+        new mockValidationStrategy());
 
 newLedger.beginBlock();
 newLedger.addEvent(new inceptionEvent({identifier:"test", key:"key0"}));
@@ -79,7 +87,7 @@ newLedger.addEvent(new changeEvent({key:"key1"}));
 newLedger.addEvent(new changeEvent({key:"key2"}));
 newLedger.endBlock();
 
+console.log("Blocks:",newLedger.blocks, "State:", newLedger.state);
 
 assert.strictEqual(newLedger.state.key, "key2");
 
-console.dump(ledger);

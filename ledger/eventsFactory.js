@@ -5,14 +5,13 @@ function EventsFactory(){
         eventsFilters.push(f);
     }
 
-    this.loadEvent = function(ledger, eventJSON){
+    this.loadEvent = function(eventJSON){
         let currentFilter;
         eventsFilters.some( (filter) => {
             let eventInstance = filter(eventJSON)
             if(eventInstance === undefined) {
                 return false;
             }
-            eventInstance.action(ledger)
             return true;
         })
 
